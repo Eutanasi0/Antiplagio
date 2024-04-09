@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tarea</title>
+    <style>
+        body{
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <p>Seleccione 2 archivos de texto para comparar</p>
+ 
+    <div>
+        <input type="file" class="texto1" id="texto1">
+    </div>
+    <div>
+        <input type="file" class="texto2" id="texto2">
+    </div>
+    <div>
+        <button onclick="comparar()">Comparar</button>
+    </div>
+
+    <div id="resultado"></div>
+</body>
+<script>
+function comparar() {
+    const archivoTexto1 = document.getElementById('texto1').files[0];
+    const archivoTexto2 = document.getElementById('texto2').files[0];
+
+    let palabrasTexto1 = [];
+    let palabrasTexto2 = [];
+
+    if (archivoTexto1 && archivoTexto2) {
+        const reader1 = new FileReader();
+        const reader2 = new FileReader();
+
+        reader1.onload = function(event) {
+            palabrasTexto1 = event.target.result.match(/\b(\w+)\b/g);
+            console.log("Palabras del texto 1:", palabrasTexto1);
+        };
+
+        reader2.onload = function(event) {
+            palabrasTexto2 = event.target.result.match(/\b(\w+)\b/g);
+            console.log("Palabras del texto 2:", palabrasTexto2);
+        };
+
+        reader1.readAsText(archivoTexto1);
+        reader2.readAsText(archivoTexto2);
+
+        setTimeout(() => {
+            const palabrasComunes = palabrasTexto1.filter(palabra => palabrasTexto2.includes(palabra));
+            console.log("Palabras comunes:", palabrasComunes);
+            const suma = palabrasTexto1.length + palabrasTexto2.length;
+            const percentage = (palabrasComunes.length * 2 / suma) * 100;
+            console.log("La suma de las palabras de los dos textos es:", suma);
+            console.log("El porcentaje de palabras comunes es:", percentage, "%");
+            document.getElementById('resultado').innerHTML = "<p>El porcentaje de palabras comunes es: " + percentage + "%</p>";
+        }, 1000);
+
+
+    } else {
+        alert("Por favor, seleccione dos archivos de texto.");
+    }
+
+}
+
+
+</script>
+</html>
