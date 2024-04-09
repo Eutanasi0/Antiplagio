@@ -1,5 +1,5 @@
 # Antiplagio
-A homework for Data Estructure course in unmsm
+# A homework for Data Estructure course in unmsm
 pregunta 1 : codigo antiplagio implementando arraylists:
 https://eutanasi0.github.io/Antiplagio/pregunta1.html
 
