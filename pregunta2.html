@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tarea</title>
+    <style>
+        body{
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <p>Seleccione 2 archivos de texto para comparar</p>
+ 
+    <div>
+        <input type="file" class="texto1" id="texto1">
+    </div>
+    <div>
+        <input type="file" class="texto2" id="texto2">
+    </div>
+    <div>
+        <button onclick="comparar()">Comparar</button>
+    </div>
+
+    <div id="resultado"></div>
+</body>
+<script>
+function comparar() {
+    const archivoTexto1 = document.getElementById('texto1').files[0];
+    const archivoTexto2 = document.getElementById('texto2').files[0];
+
+    let palabrasTexto1 = new Set();
+    let palabrasTexto2 = new Set();
+
+    if (archivoTexto1 && archivoTexto2) {
+        const reader1 = new FileReader();
+        const reader2 = new FileReader();
+
+        function reconocePalbrasconTilde() {
+            const palabras = event.target.result.match(/\b(\w+)\b/g);
+            return palabras.map(palabra => palabra.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+        }
+        reader1.onload = function(event) {
+            const palabras = event.target.result.match(/\b(\w+)\b/g);
+            palabrasTexto1 = new Set(palabras);
+            reconocePalbrasconTilde();
+            console.log("Palabras del texto 1:", palabrasTexto1);
+        };
+
+        reader2.onload = function(event) {
+            const palabras = event.target.result.match(/\b(\w+)\b/g);
+            palabrasTexto2 = new Set(palabras);
+            reconocePalbrasconTilde();
+            console.log("Palabras del texto 2:", palabrasTexto2);
+        };
+
+        reader1.readAsText(archivoTexto1);
+        reader2.readAsText(archivoTexto2);
+
+        setTimeout(() => {
+            const palabrasComunes = new Set([...palabrasTexto1].filter(palabra => palabrasTexto2.has(palabra)));
+            console.log("Palabras comunes:", palabrasComunes);
+            const suma = palabrasTexto1.size + palabrasTexto2.size;
+            const percentage = (palabrasComunes.size * 2 / suma) * 100;
+            console.log("La suma de las palabras únicas de los dos textos es:", suma);
+            console.log("El porcentaje de palabras comunes es:", percentage, "%");
+            document.getElementById('resultado').innerHTML = "<p>El porcentaje de palabras comunes es: " + percentage.toFixed(2) + "%</p>";
+        }, 1000);
+
+
+    } else {
+        alert("Por favor, seleccione dos archivos de texto.");
+    }
+
+}
+
+</script>
+</html>
+
