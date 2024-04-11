@@ -32,20 +32,22 @@ function comparar() {
     const archivoTexto1 = document.getElementById('texto1').files[0];
     const archivoTexto2 = document.getElementById('texto2').files[0];
 
-    let palabrasTexto1 = [];
-    let palabrasTexto2 = [];
+    let palabrasTexto1 = new Set();
+    let palabrasTexto2 = new Set();
 
     if (archivoTexto1 && archivoTexto2) {
         const reader1 = new FileReader();
         const reader2 = new FileReader();
 
         reader1.onload = function(event) {
-            palabrasTexto1 = event.target.result.match(/\b(\w+)\b/g);
+            const palabras = event.target.result.match(/\b(\w+)\b/g);
+            palabrasTexto1 = new Set(palabras);
             console.log("Palabras del texto 1:", palabrasTexto1);
         };
 
         reader2.onload = function(event) {
-            palabrasTexto2 = event.target.result.match(/\b(\w+)\b/g);
+            const palabras = event.target.result.match(/\b(\w+)\b/g);
+            palabrasTexto2 = new Set(palabras);
             console.log("Palabras del texto 2:", palabrasTexto2);
         };
 
@@ -53,13 +55,13 @@ function comparar() {
         reader2.readAsText(archivoTexto2);
 
         setTimeout(() => {
-            const palabrasComunes = palabrasTexto1.filter(palabra => palabrasTexto2.includes(palabra));
+            const palabrasComunes = new Set([...palabrasTexto1].filter(palabra => palabrasTexto2.has(palabra)));
             console.log("Palabras comunes:", palabrasComunes);
-            const suma = palabrasTexto1.length + palabrasTexto2.length;
-            const percentage = (palabrasComunes.length * 2 / suma) * 100;
-            console.log("La suma de las palabras de los dos textos es:", suma);
+            const suma = palabrasTexto1.size + palabrasTexto2.size;
+            const percentage = (palabrasComunes.size * 2 / suma) * 100;
+            console.log("La suma de las palabras únicas de los dos textos es:", suma);
             console.log("El porcentaje de palabras comunes es:", percentage, "%");
-            document.getElementById('resultado').innerHTML = "<p>El porcentaje de palabras comunes es: " + percentage + "%</p>";
+            document.getElementById('resultado').innerHTML = "<p>El porcentaje de palabras comunes es: " + percentage.toFixed(2) + "%</p>";
         }, 1000);
 
 
@@ -68,7 +70,6 @@ function comparar() {
     }
 
 }
-
 
 </script>
 </html>
