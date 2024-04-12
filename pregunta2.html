@@ -28,7 +28,12 @@
     <div id="resultado"></div>
 </body>
 <script>
+    
+function dividirTextoEnPalabras(texto) {
+    return texto.match(/[a-zA-ZáéíóúüÁÉÍÓÚÜ]+/g);
+}
 function comparar() {
+
     const archivoTexto1 = document.getElementById('texto1').files[0];
     const archivoTexto2 = document.getElementById('texto2').files[0];
 
@@ -39,26 +44,25 @@ function comparar() {
         const reader1 = new FileReader();
         const reader2 = new FileReader();
 
-        function reconocePalbrasconTilde() {
-            const palabras = event.target.result.match(/\b(\w+)\b/g);
-            return palabras.map(palabra => palabra.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
-        }
+
         reader1.onload = function(event) {
-            const palabras = event.target.result.match(/\b(\w+)\b/g);
+            const palabras = dividirTextoEnPalabras(event.target.result);
             palabrasTexto1 = new Set(palabras);
-            reconocePalbrasconTilde();
+            
             console.log("Palabras del texto 1:", palabrasTexto1);
         };
 
         reader2.onload = function(event) {
-            const palabras = event.target.result.match(/\b(\w+)\b/g);
+            const palabras = dividirTextoEnPalabras(event.target.result);
             palabrasTexto2 = new Set(palabras);
-            reconocePalbrasconTilde();
+            
             console.log("Palabras del texto 2:", palabrasTexto2);
         };
 
-        reader1.readAsText(archivoTexto1);
-        reader2.readAsText(archivoTexto2);
+        
+
+        reader1.readAsText(archivoTexto1, 'UTF-8'); // Especificar UTF-8 como codificación
+        reader2.readAsText(archivoTexto2, 'UTF-8'); // Especificar UTF-8 como codificación
 
         setTimeout(() => {
             const palabrasComunes = new Set([...palabrasTexto1].filter(palabra => palabrasTexto2.has(palabra)));
