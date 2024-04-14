@@ -69,9 +69,12 @@ function comparar() {
             console.log("Palabras comunes:", palabrasComunes);
             const suma = palabrasTexto1.size + palabrasTexto2.size;
             const percentage = (palabrasComunes.size * 2 / suma) * 100;
+            const percentageTexto1 = (palabrasComunes.size / palabrasTexto1.size) * 100;
+            const percentagetexto2 = (palabrasComunes.size / palabrasTexto2.size) * 100;
             console.log("La suma de las palabras únicas de los dos textos es:", suma);
             console.log("El porcentaje de palabras comunes es:", percentage, "%");
-            document.getElementById('resultado').innerHTML = "<p>El porcentaje de palabras comunes es: " + percentage.toFixed(2) + "%</p>";
+            document.getElementById('resultado').innerHTML = "<p>El porcentaje de palabras comunes de el texto 1 es: " + percentageTexto1.toFixed(2) + "%</p>";
+            document.getElementById('resultado').innerHTML += "<p>El porcentaje de palabras comunes de el texto 2 es: " + percentagetexto2.toFixed(2) + "%</p>";
         }, 1000);
 
 
